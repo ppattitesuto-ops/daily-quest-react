@@ -1,16 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
-
   // 【ReactのState定義】
   // [現在の値, 値を更新するための専用の関数] = useState(初期値);
-  const [level, setLevel] = useState(1);
-  const [xp, setXp] = useState(0);
+  const [level, setLevel] = useState(() => Number(localStorage.getItem('level')) || 1);
+  const [xp, setXp] = useState(() => Number(localStorage.getItem('xp')) || 0);
   // 【追記】空の配列（ [] ）を初期値として、questsという状態を作る
-  const [quests, setQuests] = useState([]);
+  const [quests, setQuests] = useState(() => {
+    const local = localStorage.getItem('quests');
+    return local ? JSON.parse(local) : [];
+  });
   const [inputText, setInputText] = useState('');
   // レベルアップに必要なXPを計算（現在のレベル * 100）
   const neededXp = level * 100;
+
+  // ★★★ローカルストレージに保存と読み込む処理は正常に動いていたが、「level,xp,quests」のuseStateの初期値に１や[]をセットしていたことで、画面更新の際に初めにその初期値が読み込まれることによって、結果として画面を更新しても前回の内容が今回の内容に引き継がれないバグが起こっていた。→useStateの初期値の時点でlocalStorageからデータを読み込むようにコードを変えることで解決。結果処理１の自動読み込みの下のコードはいらなくなった。
+  // 💾 処理1：【自動読み込み】アプリ起動時に1回だけ、過去のデータを復元する
+  // useEffect(() => {
+  //   const localLevel = localStorage.getItem('level');
+  //   const localXp = localStorage.getItem('xp');
+  //   const localQuests = localStorage.getItem('quests');
+
+  //   if (localLevel) setLevel(Number(localLevel));
+  //   if (localXp) setXp(Number(localXp));
+  //   if (localQuests) setQuests(JSON.parse(localQuests));
+  // }, []);
+
+  // 💾 処理2：【自動保存】データが変わるたびに、自動でlocalStorageに書き込む
+  // ② level や xp が変わった瞬間を検知して、自動で保存する
+  useEffect(() => {
+    localStorage.setItem('level', level);
+    localStorage.setItem('xp', xp);
+  }, [level, xp]); // 💡 [ ] の中に監視したい変数を並べると、それが変わった時にだけ動きます！
+
+  // ③ quests（タスク一覧）が変わった瞬間を検知して、自動で保存する
+  useEffect(() => {
+    console.log("★今、questsが変更されたので保存します！", quests);
+    localStorage.setItem('quests', JSON.stringify(quests));
+  }, [quests]);
 
   // 経験値獲得の処理
   const handleGainXp = () => {
@@ -24,6 +51,7 @@ function App() {
       }
     })
   };
+
   // 要素の追加処理
   const handleAddQuest = () => {
     if (inputText.trim() === '') return;
@@ -35,6 +63,7 @@ function App() {
     setQuests([...quests, newQuest]);
     setInputText('');
   };
+
   // クエスト達成時の処理
   const handleCompleteQuest = (id) => {
     const updatedQuests = quests.map((quest) => {
@@ -76,6 +105,7 @@ function App() {
             <input
               type="checkbox"
               checked={quest.isCompleted}
+              // disabled属性は真偽値としてtrueならロック,falseなら解除というルールがあるからこのコードでいい
               disabled={quest.isCompleted}
               onChange={() => handleCompleteQuest(quest.id)}
             />

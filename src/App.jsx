@@ -76,6 +76,14 @@ function App() {
     handleGainXp();
   };
 
+  // クエストを削除する処理
+  const handleDeleteQuest = (id) => {
+    const filteredQuests = quests.filter((quest) => {
+      return quest.id !== id;
+    });
+    setQuests(filteredQuests);
+  }
+
   return (
     <div style={{ padding: '20px', background: '#0d1117', color: '#c9d1d9', minHeight: '100vh' }}>
       <h1>Daily Quest (React版)</h1>
@@ -110,6 +118,15 @@ function App() {
               onChange={() => handleCompleteQuest(quest.id)}
             />
             <span style={{ marginLeft: '10px' }}>{quest.text}</span>
+            <button onClick={() => {
+              if(confirm('Sure')) {
+                handleDeleteQuest(quest.id);
+              }
+            }}
+            style={{marginLeft:'10px', color:'red', cursor:'pointer', background: 'none', border:'none'}}
+            >
+              X
+            </button>
           </li>
         ))}
       </ul>

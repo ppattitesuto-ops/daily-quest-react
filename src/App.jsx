@@ -12,6 +12,9 @@ function App() {
   });
   const [inputText, setInputText] = useState('');
   const [difficulty, setDifficulty] = useState('1');
+  const [curseUntil, setCurseUntil] = useState(() => Number(localStorage.getItem('curseUntil')) || 0);
+  const [lastCheckedDate, setLastCheckedDate] = useState(() => localStorage.getItem('lastCheckedDate') || '');
+
   // レベルアップに必要なXPを計算（現在のレベル * 100）
   const neededXp = level * 100;
 
@@ -32,7 +35,8 @@ function App() {
   useEffect(() => {
     localStorage.setItem('level', level);
     localStorage.setItem('xp', xp);
-  }, [level, xp]); // 💡 [ ] の中に監視したい変数を並べると、それが変わった時にだけ動きます！
+    localStorage.setItem('curseUntil', curseUntil);
+  }, [level, xp, curseUntil]); // 💡 [ ] の中に監視したい変数を並べると、それが変わった時にだけ動きます！
 
   // ③ quests（タスク一覧）が変わった瞬間を検知して、自動で保存する
   useEffect(() => {
@@ -40,18 +44,43 @@ function App() {
     localStorage.setItem('quests', JSON.stringify(quests));
   }, [quests]);
 
+  // ④アプリ起動時に毎回行われる呪い判定の処理
+  useEffect(() => {
+    const d = new Date();
+    const todayStr = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+    const now = Date.now();
+
+    if (now < curseUntil) {
+      console.log("あなたは呪われています...");
+      localStorage.setItem('lastCheckedDate', todayStr);
+      return;
+    }
+    if (lastCheckedDate !== todayStr && lastCheckedDate !== '') {
+      const hasUncompletedQuest = quests.some((quest) => quest.isCompleted === false);
+      if (hasUncompletedQuest) {
+        const newCurseUntil = Date.now() + 604800000;
+        setCurseUntil(newCurseUntil);
+        alert("自動検知；もう25歳、今までの敗北の歴史を変えるんじゃないのか？");
+      };
+    };
+    localStorage.setItem('lastCheckedDate', todayStr);
+  }, []);
+
   // 経験値獲得の処理
   const handleGainXp = (amount) => {
     setXp((prevXp) => {
       let gainAmount = 0;
-      if (amount === '1') {
+      if (Date.now() < curseUntil) {
         gainAmount = 10;
-      } else if (amount === '2') {
-        gainAmount = 30;
       } else {
-        gainAmount = 50;
+        if (amount === '1') {
+          gainAmount = 10;
+        } else if (amount === '2') {
+          gainAmount = 30;
+        } else {
+          gainAmount = 50;
+        };
       };
-
       const nextXp = prevXp + gainAmount;
       if (nextXp >= level * 100) {
         setLevel(level + 1);
@@ -159,3 +188,11 @@ function App() {
 }
 
 export default App;
+
+// 1;呪いが解けるタイムスタンプ（curseUntil）→まずuseStateにて値を保持して画面を更新した際にもlocalStorageから値が読み込まれるようにする。値は、呪いが発動した時間から７日後。
+// 前回開いた日付の文字列（lastCheckedDate）→まずuseStateにて値を保持して画面を更新した際にもlocalStorageから値が読み込まれるようにする。アプリを開くたびにその開いた日付を値に入れて値を更新するようにする。
+
+// 2;つかうべきフックはuseEffect。このreactの関数を使ってアプリ起動時に今回開いた時の日付を保持する。
+
+// 3;if (amount === '1') {
+//   のコードの前に今日開いた日付と前回開いた日付が同じかどうか。変更されているかつ、前回から設定したタスクにチェックがついていないものが残っているようなら。gainAmountにたいして難易度にかかわらずプラス１０ｐｘをする処理を追加する。そして、この処理と呪いがつかなかった場合の処理を条件分岐で設定して分ける。

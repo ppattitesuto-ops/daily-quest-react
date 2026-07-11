@@ -11,6 +11,7 @@ function App() {
     return local ? JSON.parse(local) : [];
   });
   const [inputText, setInputText] = useState('');
+  const [difficulty, setDifficulty] = useState('1');
   // レベルアップに必要なXPを計算（現在のレベル * 100）
   const neededXp = level * 100;
 
@@ -40,9 +41,18 @@ function App() {
   }, [quests]);
 
   // 経験値獲得の処理
-  const handleGainXp = () => {
+  const handleGainXp = (amount) => {
     setXp((prevXp) => {
-      const nextXp = prevXp + 10;
+      let gainAmount = 0;
+      if (amount === '1') {
+        gainAmount = 10;
+      } else if (amount === '2') {
+        gainAmount = 30;
+      } else {
+        gainAmount = 50;
+      };
+
+      const nextXp = prevXp + gainAmount;
       if (nextXp >= level * 100) {
         setLevel(level + 1);
         return 0;
@@ -58,7 +68,8 @@ function App() {
     const newQuest = {
       id: Date.now(),
       text: inputText,
-      isCompleted: false
+      isCompleted: false,
+      difficulty: difficulty
     };
     setQuests([...quests, newQuest]);
     setInputText('');
@@ -66,14 +77,16 @@ function App() {
 
   // クエスト達成時の処理
   const handleCompleteQuest = (id) => {
+    let targetDifficulty = '1';
     const updatedQuests = quests.map((quest) => {
       if (quest.id === id) {
+        targetDifficulty = quest.difficulty;
         return { ...quest, isCompleted: true };
       }
       return quest;
     });
     setQuests(updatedQuests);
-    handleGainXp();
+    handleGainXp(targetDifficulty);
   };
 
   // クエストを削除する処理
@@ -90,7 +103,7 @@ function App() {
       {/* ⭕ Reactの『宣言的UI』：{} で囲むだけで、データが画面に自動連動する */}
       <div>現在のレベル: {level}</div>
       <div>現在のXP: {xp} / 次のレベルまで: {neededXp} XP</div>
-      <button onClick={handleGainXp}>経験値+10</button>
+      <button onClick={() => handleGainXp('1')}>経験値+10</button>
 
       {/* 🛠️ クエスト追加エリア */}
       <div style={{ marginTop: '20px' }}>
@@ -102,6 +115,17 @@ function App() {
           placeholder='新しいクエストを入力...'
           style={{ color: '#000', padding: '5px' }}
         />
+
+        <select
+          value={difficulty}
+          onChange={(e) => setDifficulty(e.target.value)}
+          style={{ color: '#000', padding: '5px', marginLeft: '5px' }}
+        >
+          <option value="1">難易度1 (10XP)</option>
+          <option value="2">難易度2 (30XP)</option>
+          <option value="3">難易度3 (50XP)</option>
+        </select>
+
         <button onClick={handleAddQuest} style={{ marginLeft: '5px' }}>追加</button>
       </div>
 
@@ -119,11 +143,11 @@ function App() {
             />
             <span style={{ marginLeft: '10px' }}>{quest.text}</span>
             <button onClick={() => {
-              if(confirm('Sure')) {
+              if (confirm('Sure')) {
                 handleDeleteQuest(quest.id);
               }
             }}
-            style={{marginLeft:'10px', color:'red', cursor:'pointer', background: 'none', border:'none'}}
+              style={{ marginLeft: '10px', color: 'red', cursor: 'pointer', background: 'none', border: 'none' }}
             >
               X
             </button>

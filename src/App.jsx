@@ -124,6 +124,13 @@ function App() {
       <div>現在のレベル: {level}</div>
       <div>現在のXP: {xp} / 次のレベルまで: {neededXp} XP</div>
       <button onClick={() => handleGainXp('1')}>経験値+10</button>
+      <button onClick={() => {
+        const testCurseTime = Date.now() + 604800000;
+        setCurseUntil(testCurseTime);
+        alert("テスト")
+      }}
+      style={{ marginLeft: '10px', backgroundColor: 'purple', color: '#fff', border: 'none', cursor: 'pointer', padding: '10px' }}
+      >強制呪い発動</button>
 
       {/* 🛠️ クエスト追加エリア */}
       <div style={{ marginTop: '20px' }}>

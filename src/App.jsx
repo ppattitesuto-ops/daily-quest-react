@@ -18,18 +18,6 @@ function App() {
   // レベルアップに必要なXPを計算（現在のレベル * 100）
   const neededXp = level * 100;
 
-  // ★★★ローカルストレージに保存と読み込む処理は正常に動いていたが、「level,xp,quests」のuseStateの初期値に１や[]をセットしていたことで、画面更新の際に初めにその初期値が読み込まれることによって、結果として画面を更新しても前回の内容が今回の内容に引き継がれないバグが起こっていた。→useStateの初期値の時点でlocalStorageからデータを読み込むようにコードを変えることで解決。結果処理１の自動読み込みの下のコードはいらなくなった。
-  // 💾 処理1：【自動読み込み】アプリ起動時に1回だけ、過去のデータを復元する
-  // useEffect(() => {
-  //   const localLevel = localStorage.getItem('level');
-  //   const localXp = localStorage.getItem('xp');
-  //   const localQuests = localStorage.getItem('quests');
-
-  //   if (localLevel) setLevel(Number(localLevel));
-  //   if (localXp) setXp(Number(localXp));
-  //   if (localQuests) setQuests(JSON.parse(localQuests));
-  // }, []);
-
   // 💾 処理2：【自動保存】データが変わるたびに、自動でlocalStorageに書き込む
   // ② level や xp が変わった瞬間を検知して、自動で保存する
   useEffect(() => {
@@ -126,8 +114,11 @@ function App() {
     setQuests(filteredQuests);
   }
 
+  const isCurseActive = Date.now() < curseUntil;
+
   return (
-    <div style={{ padding: '20px', background: '#0d1117', color: '#c9d1d9', minHeight: '100vh' }}>
+    <div style={{ padding: '20px', background: isCurseActive ?'#1a052e' : '#0d1117', 
+    color: isCurseActive ? '#FF5555': '#c9d1d9', minHeight: '100vh' }}>
       <h1>Daily Quest (React版)</h1>
       {/* ⭕ Reactの『宣言的UI』：{} で囲むだけで、データが画面に自動連動する */}
       <div>現在のレベル: {level}</div>
@@ -188,11 +179,3 @@ function App() {
 }
 
 export default App;
-
-// 1;呪いが解けるタイムスタンプ（curseUntil）→まずuseStateにて値を保持して画面を更新した際にもlocalStorageから値が読み込まれるようにする。値は、呪いが発動した時間から７日後。
-// 前回開いた日付の文字列（lastCheckedDate）→まずuseStateにて値を保持して画面を更新した際にもlocalStorageから値が読み込まれるようにする。アプリを開くたびにその開いた日付を値に入れて値を更新するようにする。
-
-// 2;つかうべきフックはuseEffect。このreactの関数を使ってアプリ起動時に今回開いた時の日付を保持する。
-
-// 3;if (amount === '1') {
-//   のコードの前に今日開いた日付と前回開いた日付が同じかどうか。変更されているかつ、前回から設定したタスクにチェックがついていないものが残っているようなら。gainAmountにたいして難易度にかかわらずプラス１０ｐｘをする処理を追加する。そして、この処理と呪いがつかなかった場合の処理を条件分岐で設定して分ける。

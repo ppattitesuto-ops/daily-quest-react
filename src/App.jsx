@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
+import QuestForm from './QuestForm';
 
 function App() {
   // 【ReactのState定義】
@@ -123,6 +124,9 @@ function App() {
       padding: '20px', background: isCurseActive ? '#1a052e' : '#0d1117',
       color: isCurseActive ? '#FF5555' : '#c9d1d9', minHeight: '100vh'
     }}>
+
+
+      {/* 📚ヘッダー部分 */}
       <h1>Daily Quest (React版)</h1>
       {/* ⭕ Reactの『宣言的UI』：{} で囲むだけで、データが画面に自動連動する */}
       <Header level={level} xp={xp} neededXp={neededXp} />
@@ -135,31 +139,12 @@ function App() {
         style={{ marginLeft: '10px', backgroundColor: 'purple', color: '#fff', border: 'none', cursor: 'pointer', padding: '10px' }}
       >強制呪い発動</button>
 
+
       {/* 🛠️ クエスト追加エリア */}
-      <div style={{ marginTop: '20px' }}>
-        <input
-          type='text'
-          value={inputText}
-          /* 入力された文字をリアルタイムで変数inputTextに同期させるReactの必須コード */
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder='新しいクエストを入力...'
-          style={{ color: '#000', padding: '5px' }}
-        />
+      <QuestForm inputText={inputText} setInputText={setInputText} difficulty={difficulty} setDifficulty={setDifficulty} handleAddQuest={handleAddQuest} />
 
-        <select
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-          style={{ color: '#000', padding: '5px', marginLeft: '5px' }}
-        >
-          <option value="1">難易度1 (10XP)</option>
-          <option value="2">難易度2 (30XP)</option>
-          <option value="3">難易度3 (50XP)</option>
-        </select>
 
-        <button onClick={handleAddQuest} style={{ marginLeft: '5px' }}>追加</button>
-      </div>
-
-      {/* 🔄 クエスト一覧表示エリア（ここで初めて「map」を使います！） */}
+      {/* 🔄 クエスト一覧表示エリア */}
       <ul style={{ marginTop: '20px' }}>
         {/* ② 配列の中身をループして画面に<li>として出力する、JavaScriptの「配列用のメソッド名」は何？ */}
         {quests.map((quest) => (

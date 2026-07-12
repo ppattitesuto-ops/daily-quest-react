@@ -1,0 +1,19 @@
+.container {
+  padding: 20px;
+  min-height: 100vh;
+  background: #000000;
+  font-family: "DotGothic16", sans-serif;
+  border: 3px solid transparent;
+  color: #c9d1d9;
+}
+
+.curseActive {
+  background-color: purple;
+  border-color: #ff5555;
+  border-style: double;
+  color: #ff5555;
+}
+
+.title {
+  margin: 16px 0 20px;
+}

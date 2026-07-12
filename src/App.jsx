@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from './Header';
 import QuestForm from './QuestForm';
 import QuestList from './QuestList';
+import styles from './App.module.css';
 
 function App() {
   // 【ReactのState定義】
@@ -121,17 +122,10 @@ function App() {
 
 
   return (
-    <div style={{
-      padding: '20px',
-      minHeight: '100vh',
-      background: '#000000',
-      fontFamily: '"DotGothic16", sans-serif',
-      border: isCurseActive ? '3px double #ff5555' : 'none',
-      color: isCurseActive ? '#FF5555' : '#c9d1d9',
-    }}>
+    <div className={`${styles.container} ${isCurseActive ? styles.curseActive : ''}`}>
 
       {/* 📚ヘッダー部分 */}
-      <h1>Daily Quest (React版)</h1>
+      <h1 className={styles.title}>Daily Quest (React版)</h1>
       {/* ⭕ Reactの『宣言的UI』：{} で囲むだけで、データが画面に自動連動する */}
       <Header level={level} xp={xp} neededXp={neededXp} />
       <button onClick={() => handleGainXp('1')}>経験値+10</button>

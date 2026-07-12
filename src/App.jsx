@@ -51,7 +51,7 @@ function App() {
       if (hasUncompletedQuest) {
         const newCurseUntil = Date.now() + 604800000;
         setCurseUntil(newCurseUntil);
-        alert("自動検知；もう25歳、今までの敗北の歴史を変えるんじゃないのか？");
+        alert("自動検知:もう25歳、今までの敗北の歴史を変えるんじゃないのか？");
       };
     };
     localStorage.setItem('lastCheckedDate', todayStr);
@@ -122,10 +122,13 @@ function App() {
 
   return (
     <div style={{
-      padding: '20px', background: isCurseActive ? '#1a052e' : '#0d1117',
-      color: isCurseActive ? '#FF5555' : '#c9d1d9', minHeight: '100vh'
+      padding: '20px',
+      minHeight: '100vh',
+      background: '#000000',
+      fontFamily: '"DotGothic16", sans-serif',
+      border: isCurseActive ? '3px double #ff5555' : 'none',
+      color: isCurseActive ? '#FF5555' : '#c9d1d9',
     }}>
-
 
       {/* 📚ヘッダー部分 */}
       <h1>Daily Quest (React版)</h1>
@@ -137,7 +140,14 @@ function App() {
         setCurseUntil(testCurseTime);
         alert("テスト")
       }}
-        style={{ marginLeft: '10px', backgroundColor: 'purple', color: '#fff', border: 'none', cursor: 'pointer', padding: '10px' }}
+        style={{
+          marginLeft: '10px',
+          backgroundColor: 'purple',
+          color: '#fff',
+          border: 'none',
+          cursor: 'pointer',
+          padding: '10px'
+        }}
       >強制呪い発動</button>
 
       {/* 🛠️ クエスト追加エリア */}

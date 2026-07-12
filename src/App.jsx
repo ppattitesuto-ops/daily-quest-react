@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Header from './Header';
 
 function App() {
   // 【ReactのState定義】
@@ -116,20 +117,22 @@ function App() {
 
   const isCurseActive = Date.now() < curseUntil;
 
+
   return (
-    <div style={{ padding: '20px', background: isCurseActive ?'#1a052e' : '#0d1117', 
-    color: isCurseActive ? '#FF5555': '#c9d1d9', minHeight: '100vh' }}>
+    <div style={{
+      padding: '20px', background: isCurseActive ? '#1a052e' : '#0d1117',
+      color: isCurseActive ? '#FF5555' : '#c9d1d9', minHeight: '100vh'
+    }}>
       <h1>Daily Quest (React版)</h1>
       {/* ⭕ Reactの『宣言的UI』：{} で囲むだけで、データが画面に自動連動する */}
-      <div>現在のレベル: {level}</div>
-      <div>現在のXP: {xp} / 次のレベルまで: {neededXp} XP</div>
+      <Header level={level} xp={xp} neededXp={neededXp} />
       <button onClick={() => handleGainXp('1')}>経験値+10</button>
       <button onClick={() => {
         const testCurseTime = Date.now() + 604800000;
         setCurseUntil(testCurseTime);
         alert("テスト")
       }}
-      style={{ marginLeft: '10px', backgroundColor: 'purple', color: '#fff', border: 'none', cursor: 'pointer', padding: '10px' }}
+        style={{ marginLeft: '10px', backgroundColor: 'purple', color: '#fff', border: 'none', cursor: 'pointer', padding: '10px' }}
       >強制呪い発動</button>
 
       {/* 🛠️ クエスト追加エリア */}
@@ -186,5 +189,3 @@ function App() {
 }
 
 export default App;
-
-

@@ -123,7 +123,7 @@ function App() {
 
   return (
     <div className={`${styles.container} ${isCurseActive ? styles.curseActive : ''}`}>
-
+      
       {/* 📚ヘッダー部分 */}
       <h1 className={styles.title}>Daily Quest (React版)</h1>
       {/* ⭕ Reactの『宣言的UI』：{} で囲むだけで、データが画面に自動連動する */}

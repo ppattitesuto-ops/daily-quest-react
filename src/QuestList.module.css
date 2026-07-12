@@ -1,0 +1,35 @@
+.container {
+  margin-top: 20px;
+
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+  font-family: "DotGothic16", sans-serif;
+
+}
+
+.quest {
+  margin-left: 10px;
+  font-size: 16px;
+  color:#ffffff;
+}
+
+.questChecked {
+  margin-left: 10px;
+  font-size: 16px;
+  text-decoration: line-through;
+  color: #888888;
+
+}
+
+.delete {
+  margin-left: auto;
+  color: #ff5555;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: "DotGothic16", sans-serif;
+}

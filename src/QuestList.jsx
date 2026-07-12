@@ -1,16 +1,13 @@
+import styles from './QuestList.module.css';
+
 function QuestList({ quests, handleCompleteQuest, handleDeleteQuest }) {
   return (
-    <ul style={{ marginTop: '20px'}}>
+    <ul className={styles.container}>
       {/* ② 配列の中身をループして画面に<li>として出力する、JavaScriptの「配列用のメソッド名」は何？ */}
       {quests.map((quest) => (
         <li
           key={quest.id}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            margin: '10px auto',
-            fontFamily: '"DotGothic16", sans-serif',
-          }}>
+          className={styles.list}>
 
           {/* 1. チェックボックス */}
           <input
@@ -23,12 +20,7 @@ function QuestList({ quests, handleCompleteQuest, handleDeleteQuest }) {
 
           {/* 2. クエストのテキスト表示エリア */}
           <span
-            style={{
-              marginLeft: '10px',
-              fontSize: '16px',
-              textDecoration: quest.isCompleted ? 'line-through' : 'none',
-              color: quest.isCompleted ? '#888888' : '#ffffff',
-            }}>
+            className={`${styles.quest} ${quest.isCompleted ?  styles.questChecked : ''}`}>
             {!quest.isCompleted ? '▶ ' : ' '}
             {quest.text}
           </span>
@@ -39,14 +31,7 @@ function QuestList({ quests, handleCompleteQuest, handleDeleteQuest }) {
               handleDeleteQuest(quest.id);
             }
           }}
-            style={{
-              marginLeft: 'auto',
-              color: '#ff5555',
-              cursor: 'pointer',
-              background: 'none',
-              border: 'none',
-              fontFamily:'"DotGothic16", sans-serif'
-            }}
+           className={styles.delete}
           >
             ▶ 逃げる
           </button>

@@ -1,0 +1,53 @@
+.container {
+  margin: 20px auto;
+    background-color: #000000;
+    border: 3px double #ffffff;
+    border-radius: 0px;
+    padding: 20px;
+    font-family: "DotGothic16", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 300px;
+}
+
+.label {
+  display: block;
+   margin-bottom: 5px;
+}
+
+.text {
+  background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 8px;
+    font-family: "DotGothic16", sans-serif;
+    width: 240px;
+    box-sizing: border-box;
+}
+
+.select {
+  background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 8px;
+    font-family: "DotGothic16", sans-serif;
+    width: 240px;
+    box-sizing: border-box;
+}
+
+.addBtn {
+  display: block;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    font-family: "DotGothic16", sans-serif;
+    font-size: 16px;
+    width:240px;
+    text-align:left;
+    padding-left:15px;
+    margin-top:8px;
+}

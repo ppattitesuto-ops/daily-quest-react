@@ -1,0 +1,21 @@
+.statusWindow {
+  background-color: #000000;
+  border: 3px double #ffffff;
+  border-radius: 0px;
+  padding: 15px;
+  width: 150px;
+  font-family: "DotGothic16", sans-serif;
+  margin: 16px auto;
+}
+
+.name {
+  margin-bottom: 10px;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.statusText {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 5px;
+}

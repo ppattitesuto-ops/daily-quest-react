@@ -1,18 +1,12 @@
+import styles from './Header.module.css';
+
 function Header({ level, xp, neededXp }) {
   return (
-    <div style={{
-      backgroundColor: '#000000',
-      border: '3px double #ffffff',
-      borderRadius: '0px',
-      padding: '15px',
-      width: '150px',
-      fontFamily: '"DotGothic16", sans-serif',
-      margin:'16px auto'
-    }}>
-      <div style={{ marginBottom: '10px', fontSize: '18px', letterSpacing: '2px' }}>
+    <div className={styles.statusWindow}>
+      <div className={styles.name}>
         名前:???
       </div>
-      <div style={{ fontSize: '14px', marginBottom: '5px' }}>
+      <div className={styles.statusText}>
         LV {level}
       </div>
       <div style={{ fontSize: '14px' }}>
